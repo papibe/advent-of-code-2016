@@ -37,13 +37,26 @@ func parse(filename string) []Triangle {
 
 	regex := regexp.MustCompile(`\s+`)
 
-	for _, line := range lines {
-		sides := regex.Split(strings.Trim(line, " "), -1)
-		side1, _ := strconv.Atoi(sides[0])
-		side2, _ := strconv.Atoi(sides[1])
-		side3, _ := strconv.Atoi(sides[2])
+	for index := 0; index < len(lines); index += 3 {
+		column1 := []int{}
+		column2 := []int{}
+		column3 := []int{}
 
-		triangles = append(triangles, Triangle{side1, side2, side3})
+		for step := 0; step < 3; step++ {
+			line := lines[index+step]
+			sides := regex.Split(strings.Trim(line, " "), -1)
+			n1, _ := strconv.Atoi(sides[0])
+			n2, _ := strconv.Atoi(sides[1])
+			n3, _ := strconv.Atoi(sides[2])
+
+			column1 = append(column1, n1)
+			column2 = append(column2, n2)
+			column3 = append(column3, n3)
+		}
+
+		triangles = append(triangles, Triangle{column1[0], column1[1], column1[2]})
+		triangles = append(triangles, Triangle{column2[0], column2[1], column2[2]})
+		triangles = append(triangles, Triangle{column3[0], column3[1], column3[2]})
 	}
 
 	return triangles
