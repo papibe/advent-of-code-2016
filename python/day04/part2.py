@@ -1,7 +1,6 @@
-import re
-from collections import deque
 from dataclasses import dataclass
-from typing import Deque, Dict, List, Match, Optional, Set, Tuple
+from typing import Dict, List
+
 
 @dataclass
 class Room:
@@ -24,11 +23,11 @@ class Room:
             bucket[v].append(k)
 
         # sort alphabetically
-        for k, v in bucket.items():
-            v.sort()
+        for _, letters in bucket.items():
+            letters.sort()
 
         # sort frequencies
-        sorted_freqs: List[str] = sorted(bucket, reverse=True)
+        sorted_freqs: List[int] = sorted(bucket, reverse=True)
 
         # calculate long checksum
         checksum: List[str] = []
@@ -42,16 +41,19 @@ class Room:
 
     def decrypt(self) -> str:
         plain: List[str] = []
+        plain_char: str
+
         for char in self.raw_name:
             # print(char)
             if char == "-":
-                plain_char: str = " "
+                plain_char = " "
             else:
                 plain_value = (ord(char) - ord("a") + self.sector) % 26 + ord("a")
-                plain_char: str = chr(plain_value)
+                plain_char = chr(plain_value)
             plain.append(plain_char)
 
         return "".join(plain)
+
 
 def parse(filename: str) -> List[Room]:
     with open(filename, "r") as fp:
@@ -91,5 +93,4 @@ def solution(filename: str) -> int:
 
 
 if __name__ == "__main__":
-    # print(solution("./example2.txt"))  # 0
     print(solution("./input.txt"))  # 0
