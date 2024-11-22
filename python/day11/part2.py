@@ -103,27 +103,27 @@ class Building:
         output.append("----")
         return "\n".join(output)
 
-    # def __hash__(self) -> int:
-    #     serializable_building: Dict[int | str, int | List[str]] = {
-    #         "floor": self.current_floor
-    #     }
-    #     for floor in range(self.len):
-    #         serializable_building[floor] = sorted(
-    #             [str(e) for e in self.floors[floor].get_all()]
-    #         )
+    def __hash__(self) -> int:
+        serializable_building: Dict[int | str, int | List[str]] = {
+            "floor": self.current_floor
+        }
+        for floor in range(self.len):
+            serializable_building[floor] = sorted(
+                [str(e) for e in self.floors[floor].get_all()]
+            )
 
-    #     return hash(json.dumps(serializable_building))
+        return hash(json.dumps(serializable_building))
 
 
-    def __hash__(self):
-        item_pair = {}
-        for i, floor in enumerate(self.floors):
-            for chip in floor.microchips:
-                item_pair[chip.material] = [i]
-        for i, floor in enumerate(self.floors):
-            for gen in floor.generators:
-                item_pair[gen.material].append(i)
-        return hash(str(sorted(item_pair.values())) + str(self.current_floor))
+    # def __hash__(self):
+    #     item_pair = {}
+    #     for i, floor in enumerate(self.floors):
+    #         for chip in floor.microchips:
+    #             item_pair[chip.material] = [i]
+    #     for i, floor in enumerate(self.floors):
+    #         for gen in floor.generators:
+    #             item_pair[gen.material].append(i)
+    #     return hash(str(sorted(item_pair.values())) + str(self.current_floor))
 
 
     def __eq__(self, other: object) -> Any:
@@ -259,4 +259,4 @@ def solution(filename: str) -> int:
 
 
 if __name__ == "__main__":
-    print(solution("./input.txt"))  #
+    print(solution("./input.txt"))  # 61
