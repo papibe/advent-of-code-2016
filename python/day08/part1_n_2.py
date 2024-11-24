@@ -1,7 +1,7 @@
 import re
 from dataclasses import dataclass
 from enum import Enum
-from typing import List, Match, Optional
+from typing import List, Match, Optional, Tuple
 
 
 class InstructionType(Enum):
@@ -61,11 +61,12 @@ class Display:
         return counter
 
     def print(self) -> None:
+        output: List[str] = []
         for row in range(self.rows):
             for col in range(self.cols):
-                print(self.grid[row][col], end="")
-            print()
-        print()
+                output.append(self.grid[row][col])
+            output.append("\n")
+        return "".join(output)
 
 
 def parse(filename: str) -> List[Instruction]:
@@ -110,7 +111,7 @@ def parse(filename: str) -> List[Instruction]:
     return instructions
 
 
-def solve(instructions: List[Instruction], display: Display) -> int:
+def solve(instructions: List[Instruction], display: Display) -> Tuple[int, str]:
     for instruction in instructions:
         # print(instruction)
         match instruction.type_:
@@ -126,9 +127,7 @@ def solve(instructions: List[Instruction], display: Display) -> int:
             case _:
                 pass
 
-    display.print()
-
-    return display.count()
+    return display.count(), display.print()
 
 
 def solution(filename: str, rows: int, cols: int) -> int:
@@ -139,5 +138,17 @@ def solution(filename: str, rows: int, cols: int) -> int:
 
 
 if __name__ == "__main__":
-    print(solution("./example.txt", 3, 7))  # 6
-    print(solution("./input.txt", 6, 50))  # 115 and EFEYKFRFIJ
+    lit_example, example_display = solution("./example.txt", 3, 7)  # 6
+    lit_pixels, display = solution("./input.txt", 6, 50)  # 115 and EFEYKFRFIJ
+
+    print("Example")
+    print("-------")
+    print("display:")
+    print(example_display, end="")
+    print(f"lit pixels: {lit_example}")
+    print()
+    print("Both parts")
+    print("----------")
+    print("display (part 2):")
+    print(display, end="")
+    print(f"lit pixels (part 1): {lit_pixels}")
