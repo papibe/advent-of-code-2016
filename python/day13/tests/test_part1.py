@@ -16,7 +16,7 @@ layout: List[str] = [
 ]
 
 
-def test_part1() -> None:
+def test_is_open() -> None:
     for y, row in enumerate(layout):
         for x, cube in enumerate(row):
             if is_open(x, y, 10):
