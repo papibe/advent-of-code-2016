@@ -60,7 +60,7 @@ class Display:
 
         return counter
 
-    def print(self) -> None:
+    def print(self) -> str:
         output: List[str] = []
         for row in range(self.rows):
             for col in range(self.cols):
@@ -130,7 +130,7 @@ def solve(instructions: List[Instruction], display: Display) -> Tuple[int, str]:
     return display.count(), display.print()
 
 
-def solution(filename: str, rows: int, cols: int) -> int:
+def solution(filename: str, rows: int, cols: int) -> Tuple[int, str]:
     instructions: List[Instruction] = parse(filename)
     display: Display = Display(rows, cols)
 
