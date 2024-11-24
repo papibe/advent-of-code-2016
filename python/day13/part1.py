@@ -1,9 +1,6 @@
 from collections import deque
 from typing import Deque, Set, Tuple
 
-OPEN: str = "."
-WALL: str = "#"
-
 
 def is_open(x: int, y: int, favorite_number: int) -> bool:
     value: int = x * x + 3 * x + 2 * x * y + y + y * y + favorite_number
@@ -13,7 +10,7 @@ def is_open(x: int, y: int, favorite_number: int) -> bool:
 
 
 def solution(favorite_number: int, xgoal: int, ygoal: int) -> int:
-    # BFS init
+    # BFS setup
     queue: Deque[Tuple[int, int, int]] = deque([(1, 1, 0)])
     visited: Set[Tuple[int, int]] = set([(1, 1)])
 
@@ -25,9 +22,9 @@ def solution(favorite_number: int, xgoal: int, ygoal: int) -> int:
 
         for newx, newy in [(x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)]:
             if (
-                0 <= newx
-                and 0 <= newy
-                and is_open(x, y, favorite_number)
+                newx >= 0
+                and newy >= 0
+                and is_open(newx, newy, favorite_number)
                 and (newx, newy) not in visited
             ):
                 queue.append((newx, newy, steps + 1))
