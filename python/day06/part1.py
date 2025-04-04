@@ -37,5 +37,4 @@ def solution(filename: str) -> str:
 
 
 if __name__ == "__main__":
-    print(solution("./example.txt"))  # easter
     print(solution("./input.txt"))  # umejzgdw
