@@ -1,6 +1,6 @@
-# Advent of Code 2024
+# Advent of Code 2016
 
-Solutions to the 2024 Advent of Code programming challenge
+Solutions to the 2016 Advent of Code programming challenge
 
 ## Other years
 
