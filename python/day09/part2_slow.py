@@ -38,16 +38,26 @@ def parse_markers(data: str) -> Tuple[List[Marker], int]:
     return markers, len(data)
 
 
-def solve(markers: List[Marker], current_length: int) -> int:
+def solve(omarkers: List[Marker], current_length: int) -> int:
     next_length: int = 0
     position: int = 0
     cycle: int = 0
+
+    markers = []
+    for i, m in enumerate(omarkers):
+        markers.append(i)
+
+    marker_positions = []
+    for i, m in enumerate(omarkers):
+        marker_positions.append(m.position)
+
 
     while len(markers) > 0:
         marker_index: int = 0
         position: int = 0
         next_length: int = 0
         next_markers: List[Marker] = []
+        next_marker_positions: List[Marker] = []
 
         cycle += 1
 
@@ -58,18 +68,20 @@ def solve(markers: List[Marker], current_length: int) -> int:
 
 
         while marker_index < len(markers):
-            marker: Marker = markers[marker_index]
+            marker: Marker = omarkers[markers[marker_index]]
 
             # print(f"working with marker {marker_index}: {marker}")
 
-            next_length += (marker.position - position)
+            marker_position = marker_positions[marker_index]
+
+            next_length += (marker_position - position)
 
             # print(f"{next_length = }")
 
             size: int = marker.size
             times: int = marker.times
 
-            sequence_start: int = marker.position + marker.length
+            sequence_start: int = marker_position + marker.length
             sequence_end: int = sequence_start + size
 
             # print(f"{sequence_start = }, {sequence_end = }")
@@ -78,13 +90,12 @@ def solve(markers: List[Marker], current_length: int) -> int:
             for repeat in range(times):
                 i: int = marker_index + 1
 
-                while i < len(markers) and markers[i].position < sequence_end:
-                    new_marker: Marker = (
-                        markers[i].copyi(
-                            next_length + (markers[i].position - sequence_start) + size * repeat
-                        )
+                while i < len(markers) and marker_positions[i] < sequence_end:
+                    next_markers.append(markers[i])
+                    new_position = (
+                        next_length + (marker_positions[i] - sequence_start) + size * repeat
                     )
-                    next_markers.append(new_marker)
+                    next_marker_positions.append(new_position)
 
                     # print(markers[i], "--->",new_marker)
 
@@ -114,7 +125,10 @@ def solve(markers: List[Marker], current_length: int) -> int:
 
         current_length = next_length
         del markers
+        del marker_positions
+
         markers = next_markers
+        marker_positions = next_marker_positions
 
         print(current_length, len(markers))
 
@@ -141,4 +155,5 @@ def solution(filename: str) -> int:
 
 
 if __name__ == "__main__":
-    print(solution("./input.txt"))  # 0
+    # it takes 1m 35s
+    print(solution("./input.txt"))  # 10774309173
