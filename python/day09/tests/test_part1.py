@@ -13,11 +13,14 @@ from part1 import solve
         ("(6x1)(1x3)A", 6),
         ("X(8x2)(3x3)ABCY", 18),
     ],
-    # ids=[
-    #     "aa_bb_cc_dd_ee_should_be_True",
-    #     "aa_bb_cc_dd_aa_should_be_False",
-    #     "aa_bb_cc_dd_aaa_should_be_True",
-    # ],
+    ids=[
+        "ADVENT_should_be_6",
+        "A(1x5)BC_should_be_7",
+        "(3x3)XYZ_should_be_9",
+        "A(2x2)BCD(2x2)EFG_should_be_11",
+        "(6x1)(1x3)A_should_be_6",
+        "X(8x2)(3x3)ABCY_should_be_18",
+    ],
 )
 def test_part1(sequence: str, expected: int) -> None:
     result: int = solve(sequence)
