@@ -21,7 +21,7 @@ def check_sum(data: List[str]) -> str:
         else:
             data = checksum
 
-        print("".join(checksum))
+        # print("".join(checksum))
 
     return "".join(checksum)
 
@@ -45,4 +45,4 @@ def solution(puzzle_input: str, length: int) -> int:
 
 if __name__ == "__main__":
     print(solution("10000", 20))  # 01100
-    # print(solution("10001110011110000", 272))  # 10010101010011101
+    print(solution("10001110011110000", 272))  # 10010101010011101
