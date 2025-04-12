@@ -1,7 +1,6 @@
 import re
-from collections import deque
-from dataclasses import dataclass
-from typing import Deque, Dict, List, Match, Optional, Set, Tuple
+from typing import Dict, List, Match, Optional
+
 
 class Bot:
     def __init__(self) -> None:
@@ -20,21 +19,20 @@ class Bot:
 
         return self.values.pop(0)
 
-
     def give_high(self) -> int:
         if not self.values:
             raise Exception("no values to give")
 
         return self.values.pop()
 
-    def may_procede(self) -> bool:
+    def may_proceed(self) -> bool:
         return len(self.values) == 2
 
     def __repr__(self) -> str:
         return f"{self.values}"
 
 
-def parse(filename: str, value1: int, value2: int) -> List[str]:
+def parse(filename: str, value1: int, value2: int) -> int:
     with open(filename, "r") as fp:
         data: List[str] = fp.read().splitlines()
 
@@ -46,11 +44,19 @@ def parse(filename: str, value1: int, value2: int) -> List[str]:
 
     rules: Dict[int, str] = {}
 
+    # some declarations
+    value_match: Optional[Match[str]]
+    bot_match: Optional[Match[str]]
+    giving_bot: int
+    receiving_low_identity: str
+    receiving_low_number: int
+    receiving_high_identity: str
+    receiving_high_number: int
 
     # get initial values
     for line in data:
-        value_match: Optional[Match[str]] = re.match(value_regex, line)
-        bot_match: Optional[Match[str]] = re.match(bot_regex, line)
+        value_match = re.match(value_regex, line)
+        bot_match = re.match(bot_regex, line)
 
         if value_match:
             value: int = int(value_match.group(1))
@@ -60,11 +66,11 @@ def parse(filename: str, value1: int, value2: int) -> List[str]:
             bots[bot_number].receive_value(value)
 
         elif bot_match:
-            giving_bot: int = int(bot_match.group(1))
-            receiving_low_identity: str = bot_match.group(2)
-            receiving_low_number: int = int(bot_match.group(3))
-            receiving_high_identity: str = bot_match.group(4)
-            receiving_high_number: int = int(bot_match.group(5))
+            giving_bot = int(bot_match.group(1))
+            receiving_low_identity = bot_match.group(2)
+            receiving_low_number = int(bot_match.group(3))
+            receiving_high_identity = bot_match.group(4)
+            receiving_high_number = int(bot_match.group(5))
 
             if giving_bot not in bots:
                 bots[giving_bot] = Bot()
@@ -77,36 +83,24 @@ def parse(filename: str, value1: int, value2: int) -> List[str]:
 
             rules[giving_bot] = line
 
-    print(bots)
-
     # run transfer rules
-    # while any(len(bot) == 2 for bot in bots):
     while True:
         for index, bot in bots.items():
-            if bot.may_procede():
+            if bot.may_proceed():
                 break
         else:
             break
 
-        print(f"procesing: {index}, {bot}")
-        print(f"{rules[index] = }")
-
-        bot_match: Optional[Match[str]] = re.match(bot_regex, rules[index])
+        bot_match = re.match(bot_regex, rules[index])
 
         if bot_match:
 
-            giving_bot: int = int(bot_match.group(1))
-            receiving_low_number: int = int(bot_match.group(3))
-            receiving_high_number: int = int(bot_match.group(5))
+            giving_bot = int(bot_match.group(1))
+            receiving_low_number = int(bot_match.group(3))
+            receiving_high_number = int(bot_match.group(5))
 
-            receiving_low_identity: str = bot_match.group(2)
-            receiving_high_identity: str = bot_match.group(4)
-
-            print(f"{giving_bot = }, {bots[giving_bot]}")
-
-            # if bots[giving_bot].values == [value1, value2]:
-            #     return giving_bot
-
+            receiving_low_identity = bot_match.group(2)
+            receiving_high_identity = bot_match.group(4)
 
             if receiving_low_identity == "output":
                 outputs[receiving_low_number] = bots[giving_bot].give_low()
@@ -118,24 +112,7 @@ def parse(filename: str, value1: int, value2: int) -> List[str]:
             else:
                 bots[receiving_high_number].receive_value(bots[giving_bot].give_high())
 
-
-            print(bots)
-            print()
-
-
-    for k in sorted(outputs.keys()):
-        print(k, outputs[k])
-
     return outputs[0] * outputs[1] * outputs[2]
-
-
-# def solve(data: List[str]) -> int:
-#     total_sum: int = 0
-
-#     for row in data:
-#         pass
-
-    return total_sum
 
 
 def solution(filename: str, value1: int, value2: int) -> int:
@@ -143,5 +120,4 @@ def solution(filename: str, value1: int, value2: int) -> int:
 
 
 if __name__ == "__main__":
-    # print(solution("./example.txt", 2, 5))  # 0
-    print(solution("./input.txt", 17, 61))  # 0
+    print(solution("./input.txt", 17, 61))  # 2666
