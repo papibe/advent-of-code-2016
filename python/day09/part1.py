@@ -1,12 +1,10 @@
 import re
-from collections import deque
-from dataclasses import dataclass
-from typing import Deque, Dict, List, Match, Optional, Set, Tuple
+from typing import List, Match, Optional
 
 
 def parse(filename: str) -> str:
     with open(filename, "r") as fp:
-        data: List[str] = fp.read().strip()
+        data: str = fp.read().strip()
     return data
 
 
