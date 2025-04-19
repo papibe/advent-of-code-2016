@@ -35,8 +35,6 @@ def solve(sequence: str) -> int:
 
         sequence = sequence[index:]
 
-        # print(f"{sequence = }")
-        # print(output)
     return len(output)
 
 
