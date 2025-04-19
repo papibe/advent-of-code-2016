@@ -3,6 +3,7 @@ from collections import deque
 from dataclasses import dataclass
 from typing import Deque, Dict, List, Match, Optional, Set, Tuple
 
+
 @dataclass
 class Marker:
     size: int
@@ -51,7 +52,6 @@ def solve(omarkers: List[Marker], current_length: int) -> int:
     for i, m in enumerate(omarkers):
         marker_positions.append(m.position)
 
-
     while len(markers) > 0:
         marker_index: int = 0
         position: int = 0
@@ -66,7 +66,6 @@ def solve(omarkers: List[Marker], current_length: int) -> int:
         # for m in markers:
         #     print("    ", m)
 
-
         while marker_index < len(markers):
             marker: Marker = omarkers[markers[marker_index]]
 
@@ -74,7 +73,7 @@ def solve(omarkers: List[Marker], current_length: int) -> int:
 
             marker_position = marker_positions[marker_index]
 
-            next_length += (marker_position - position)
+            next_length += marker_position - position
 
             # print(f"{next_length = }")
 
@@ -93,7 +92,9 @@ def solve(omarkers: List[Marker], current_length: int) -> int:
                 while i < len(markers) and marker_positions[i] < sequence_end:
                     next_markers.append(markers[i])
                     new_position = (
-                        next_length + (marker_positions[i] - sequence_start) + size * repeat
+                        next_length
+                        + (marker_positions[i] - sequence_start)
+                        + size * repeat
                     )
                     next_marker_positions.append(new_position)
 
@@ -137,7 +138,6 @@ def solve(omarkers: List[Marker], current_length: int) -> int:
         #     print("\t", m)
 
         # break
-
 
     return current_length
 
