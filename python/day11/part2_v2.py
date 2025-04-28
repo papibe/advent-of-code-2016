@@ -2,6 +2,7 @@ import json
 import re
 from collections import deque
 from copy import deepcopy
+from queue import PriorityQueue
 from typing import Any, Deque, Dict, Generator, List, Set, Tuple
 
 
@@ -114,6 +115,7 @@ class Building:
 
     #     return hash(json.dumps(serializable_building))
 
+
     def __hash__(self):
         item_pair = {}
         for i, floor in enumerate(self.floors):
@@ -123,6 +125,7 @@ class Building:
             for gen in floor.generators:
                 item_pair[gen.material].append(i)
         return hash(str(sorted(item_pair.values())) + str(self.current_floor))
+
 
     def __eq__(self, other: object) -> Any:
         return hash(self) == hash(other)
@@ -177,6 +180,16 @@ class Building:
 
                 yield Building(next_floor, next_floors)
 
+    def priority(self) -> int:
+        return  0
+        p: int = 0
+        for floor in range(self.len):
+            p += self.floors[floor].len() * (2 ** (self.len - 1 - floor))
+        return p
+
+    def __lt__(self, other: Any) -> Any:
+        return self.priority() < other.priority()
+
 
 def parse(filename: str) -> Building:
     with open(filename, "r") as fp:
@@ -205,6 +218,29 @@ def parse(filename: str) -> Building:
     return Building(0, floors)
 
 
+def solve2(building: Building) -> int:
+    # BFS setup
+    pqueue: PriorityQueue[Tuple[int, Building]] = PriorityQueue()
+    pqueue.put((0, building))
+    visited = set([building])
+
+    # BFS
+    while pqueue:
+        steps, building = pqueue.get()
+        # print(building.repr("current building"))
+
+        if building.all_on_4th():
+            return steps
+
+        for next_building in building.next_states():
+            if next_building not in visited and next_building.is_radiation_ok():
+                pqueue.put((steps + 1, next_building))
+                visited.add(next_building)
+
+        # break
+
+    return -1
+
 def solve(building: Building) -> int:
     # BFS setup
     queue: Deque[Tuple[int, Building]] = deque([(0, building)])
@@ -225,12 +261,23 @@ def solve(building: Building) -> int:
     return -1
 
 
+
 def solution(filename: str) -> int:
     building: Building = parse(filename)
+
+    # floors: List[Floor] = []
+    # for _ in range(4):
+    #     floors.append(Floor(set(), set()))
+    # building: Building = Building(0, floors)
+
+    # Patch building for part 2
+    building.floors[0].push(Generator_("elerium"))
+    building.floors[0].push(Microchip("elerium"))
+    building.floors[0].push(Generator_("dilithium"))
+    building.floors[0].push(Microchip("dilithium"))
+
     return solve(building)
 
 
 if __name__ == "__main__":
-    print(solution("./example.txt"))  # 11
-    # it takes 0m1.500s
-    print(solution("./input.txt"))  # 37
+    print(solution("./input.txt"))  # 61
