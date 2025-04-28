@@ -104,17 +104,6 @@ class Building:
         output.append("----")
         return "\n".join(output)
 
-    # def __hash__(self) -> int:
-    #     serializable_building: Dict[int | str, int | List[str]] = {
-    #         "floor": self.current_floor
-    #     }
-    #     for floor in range(self.len):
-    #         serializable_building[floor] = sorted(
-    #             [str(e) for e in self.floors[floor].get_all()]
-    #         )
-
-    #     return hash(json.dumps(serializable_building))
-
 
     def __hash__(self):
         item_pair = {}
@@ -218,29 +207,6 @@ def parse(filename: str) -> Building:
     return Building(0, floors)
 
 
-def solve2(building: Building) -> int:
-    # BFS setup
-    pqueue: PriorityQueue[Tuple[int, Building]] = PriorityQueue()
-    pqueue.put((0, building))
-    visited = set([building])
-
-    # BFS
-    while pqueue:
-        steps, building = pqueue.get()
-        # print(building.repr("current building"))
-
-        if building.all_on_4th():
-            return steps
-
-        for next_building in building.next_states():
-            if next_building not in visited and next_building.is_radiation_ok():
-                pqueue.put((steps + 1, next_building))
-                visited.add(next_building)
-
-        # break
-
-    return -1
-
 def solve(building: Building) -> int:
     # BFS setup
     queue: Deque[Tuple[int, Building]] = deque([(0, building)])
@@ -264,11 +230,6 @@ def solve(building: Building) -> int:
 
 def solution(filename: str) -> int:
     building: Building = parse(filename)
-
-    # floors: List[Floor] = []
-    # for _ in range(4):
-    #     floors.append(Floor(set(), set()))
-    # building: Building = Building(0, floors)
 
     # Patch building for part 2
     building.floors[0].push(Generator_("elerium"))
