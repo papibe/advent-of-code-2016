@@ -1,9 +1,7 @@
-import json
 import re
-from copy import deepcopy
 from collections import deque
-from queue import PriorityQueue
-from typing import Any, Deque, Dict, Generator, List, Set, Tuple
+from copy import deepcopy
+from typing import Any, Deque, Generator, List, Set, Tuple
 
 
 class Material:
@@ -104,18 +102,7 @@ class Building:
         output.append("----")
         return "\n".join(output)
 
-    # def __hash__(self) -> int:
-    #     serializable_building: Dict[int | str, int | List[str]] = {
-    #         "floor": self.current_floor
-    #     }
-    #     for floor in range(self.len):
-    #         serializable_building[floor] = sorted(
-    #             [str(e) for e in self.floors[floor].get_all()]
-    #         )
-
-    #     return hash(json.dumps(serializable_building))
-
-    def __hash__(self):
+    def __hash__(self) -> int:
         item_pair = {}
         for i, floor in enumerate(self.floors):
             for chip in floor.microchips:
@@ -124,7 +111,6 @@ class Building:
             for gen in floor.generators:
                 item_pair[gen.material].append(i)
         return hash(str(sorted(item_pair.values())) + str(self.current_floor))
-
 
     def __eq__(self, other: object) -> Any:
         return hash(self) == hash(other)
@@ -214,27 +200,6 @@ def parse(filename: str) -> Building:
         floors.append(Floor(microchips, generators))
 
     return Building(0, floors)
-
-
-def solve2(building: Building) -> int:
-    # BFS setup
-    pqueue: PriorityQueue[Tuple[int, int, Building]] = PriorityQueue()
-    pqueue.put((building.priority(), 0, building))
-    visited = set([building])
-
-    # BFS
-    while pqueue:
-        _, steps, building = pqueue.get()
-
-        if building.all_on_4th():
-            return steps
-
-        for next_building in building.next_states():
-            if next_building not in visited and next_building.is_radiation_ok():
-                pqueue.put((next_building.priority(), steps + 1, next_building))
-                visited.add(next_building)
-
-    return -1
 
 
 def solve(building: Building) -> int:
