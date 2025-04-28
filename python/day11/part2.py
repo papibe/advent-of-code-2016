@@ -1,9 +1,7 @@
-import json
 import re
 from collections import deque
 from copy import deepcopy
-from queue import PriorityQueue
-from typing import Any, Deque, Dict, Generator, List, Set, Tuple
+from typing import Any, Deque, Generator, List, Set, Tuple
 
 
 class Material:
@@ -104,8 +102,7 @@ class Building:
         output.append("----")
         return "\n".join(output)
 
-
-    def __hash__(self):
+    def __hash__(self) -> int:
         item_pair = {}
         for i, floor in enumerate(self.floors):
             for chip in floor.microchips:
@@ -114,7 +111,6 @@ class Building:
             for gen in floor.generators:
                 item_pair[gen.material].append(i)
         return hash(str(sorted(item_pair.values())) + str(self.current_floor))
-
 
     def __eq__(self, other: object) -> Any:
         return hash(self) == hash(other)
@@ -170,7 +166,7 @@ class Building:
                 yield Building(next_floor, next_floors)
 
     def priority(self) -> int:
-        return  0
+        return 0
         p: int = 0
         for floor in range(self.len):
             p += self.floors[floor].len() * (2 ** (self.len - 1 - floor))
@@ -225,7 +221,6 @@ def solve(building: Building) -> int:
                 visited.add(next_building)
 
     return -1
-
 
 
 def solution(filename: str) -> int:
