@@ -1,8 +1,7 @@
-import json
 import re
 from collections import deque
 from copy import deepcopy
-from typing import Any, Deque, Dict, Generator, List, Set, Tuple
+from typing import Any, Deque, Generator, List, Set, Tuple
 
 
 class Material:
@@ -114,7 +113,7 @@ class Building:
 
     #     return hash(json.dumps(serializable_building))
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         item_pair = {}
         for i, floor in enumerate(self.floors):
             for chip in floor.microchips:
