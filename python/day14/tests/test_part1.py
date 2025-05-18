@@ -1,6 +1,8 @@
-import pytest
 from typing import List
-from part1 import md5_hash, count_repetitions
+
+import pytest
+
+from part1 import count_repetitions, md5_hash
 
 
 @pytest.mark.parametrize(
@@ -20,8 +22,8 @@ from part1 import md5_hash, count_repetitions
         "abc200_contains_99999",
     ],
 )
-def test_part_mdhash(source: str, expected: int) -> None:
-    result: int = md5_hash(source)
+def test_part_mdhash(source: str, expected: str) -> None:
+    result: str = md5_hash(source)
     assert expected in result, f"got {result}, needs {expected}"
 
 
@@ -36,9 +38,9 @@ def test_part_mdhash(source: str, expected: int) -> None:
     ],
 )
 def test_part_count_repetitions(
-    source: str, found: bool, char: str, fives: List[int]
+    source: str, found: bool, char: str, fives: List[str]
 ) -> None:
-    hash_: int = md5_hash(source)
+    hash_: str = md5_hash(source)
     found_result, found_char, found_fives = count_repetitions(hash_)
 
     assert found_result == found, f"got {found_result}, needs {found}"

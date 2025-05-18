@@ -1,6 +1,8 @@
-import pytest
 from typing import List
-from part2 import stretch_hash, count_repetitions
+
+import pytest
+
+from part2 import count_repetitions, stretch_hash
 
 
 @pytest.mark.parametrize(
@@ -18,8 +20,8 @@ from part2 import stretch_hash, count_repetitions
         "abc18_hashed_2017_is_a107ff634856bb300138cac6568c0f24",
     ],
 )
-def test_part_stretch_hash(source: str, times: int, expected: int) -> None:
-    result: int = stretch_hash(source, times)
+def test_part_stretch_hash(source: str, times: int, expected: str) -> None:
+    result: str = stretch_hash(source, times)
     assert expected in result, f"got {result}, needs {expected}"
 
 
@@ -34,9 +36,9 @@ def test_part_stretch_hash(source: str, times: int, expected: int) -> None:
     ],
 )
 def test_part_count_repetitions(
-    source: str, found: bool, char: str, fives: List[int]
+    source: str, found: bool, char: str, fives: List[str]
 ) -> None:
-    hash_: int = stretch_hash(source, 2016)
+    hash_: str = stretch_hash(source, 2016)
     found_result, found_char, found_fives = count_repetitions(hash_)
 
     assert found_result == found, f"got {found_result}, needs {found}"
