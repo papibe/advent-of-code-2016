@@ -8,14 +8,11 @@ import (
 )
 
 func stretch_hash(text string, times int) string {
-	var hash_string string
-
 	for range times + 1 {
 		hash_object := md5.Sum([]byte(text))
-		hash_string = hex.EncodeToString(hash_object[:])
+		text = hex.EncodeToString(hash_object[:])
 	}
-
-	return hash_string
+	return text
 }
 
 func count_repetitions(s string) (bool, string, []string) {
@@ -34,7 +31,7 @@ func count_repetitions(s string) (bool, string, []string) {
 		}
 
 		if repeated == 3 && triple_char == "" {
-			triple_char = previous_char
+			triple_char = string(char)
 			found3 = true
 		}
 
@@ -54,7 +51,7 @@ func solution(salt string) int {
 
 	candidates := make(map[string][]int)
 
-	for keys.len() < 64 {
+	for {
 		s := salt + strconv.Itoa(index)
 		hash := stretch_hash(s, 2016)
 		found3, char3, repeated_fives := count_repetitions(hash)
@@ -65,16 +62,16 @@ func solution(salt string) int {
 				candidates[char3] = []int{}
 			}
 			candidates[char3] = append(candidates[char3], index)
+		}
 
-			for _, char := range repeated_fives {
-				_, char_in_candidates := candidates[char]
-				if char_in_candidates {
-					for _, previous_index := range candidates[char] {
-						if index > previous_index && index-previous_index <= 1000 {
-							keys.add(previous_index)
-							if keys.len() == 64 {
-								return previous_index
-							}
+		for _, char := range repeated_fives {
+			_, char_in_candidates := candidates[char]
+			if char_in_candidates {
+				for _, previous_index := range candidates[char] {
+					if index > previous_index && index-previous_index <= 1000 {
+						keys.add(previous_index)
+						if keys.len() == 64 {
+							return previous_index
 						}
 					}
 				}
@@ -86,6 +83,5 @@ func solution(salt string) int {
 }
 
 func main() {
-	// fmt.Println(solution("abc"))      // 22551
 	fmt.Println(solution("cuanljph")) // 20606
 }
