@@ -1,7 +1,4 @@
-import re
-from collections import deque
-from dataclasses import dataclass
-from typing import Deque, Dict, List, Match, Optional, Set, Tuple
+from typing import List
 
 
 def check_sum(data: List[str]) -> str:
@@ -21,10 +18,7 @@ def check_sum(data: List[str]) -> str:
         else:
             data = checksum
 
-        # print("".join(checksum))
-
     return "".join(checksum)
-
 
 
 def solution(puzzle_input: str, length: int) -> int:
