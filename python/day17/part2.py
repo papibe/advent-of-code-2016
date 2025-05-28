@@ -71,4 +71,4 @@ def solution(passcode: str) -> int:
 
 
 if __name__ == "__main__":
-    print(solution("yjjvjgan"))  # 830
+    print(solution("yjjvjgan"))  # 498
