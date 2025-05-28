@@ -6,7 +6,7 @@ def check_sum(data: List[str]) -> str:
     checksum: List[str] = []
 
     while True:
-        checksum: List[str] = []
+        checksum = []
         for index in range(0, len(data), 2):
             if data[index] == data[index + 1]:
                 checksum.append("1")
@@ -21,12 +21,12 @@ def check_sum(data: List[str]) -> str:
     return "".join(checksum)
 
 
-def solution(puzzle_input: str, length: int) -> int:
+def solution(puzzle_input: str, length: int) -> str:
 
     a: List[str] = list(puzzle_input)
 
     while len(a) < length:
-        a_reversed: List[str] = reversed(a)
+        a_reversed: List[str] = reversed(a)  # type: ignore
         a.append("0")
         for char in a_reversed:
             if char == "1":
