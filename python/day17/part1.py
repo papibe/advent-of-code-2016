@@ -31,44 +31,40 @@ STEPS: Dict[str, Tuple[int, int]] = {
 OPEN_DOOR_CODE: str = "bcdef"
 
 
-def solve(
-    passcode: str, row: int, col: int, path: List[str], solutions: List[List[str]]
-) -> None:
-
-    if MAZE[row][col] == VAULT:
-        return solutions.append(path.copy())
-
-    # SPACE or START
-    hashed: str = md5_short_hash(passcode + "".join(path))
-    for d, code in zip(DOORS, hashed):
-
-        if code in OPEN_DOOR_CODE:
-            row_step, col_step = STEPS[d]
-            neighbor_row: int = row + row_step
-            neighbor_col: int = col + col_step
-
-            if MAZE[neighbor_row][neighbor_col] != WALL:
-                path.append(d)
-                solve(passcode, row + 2 * row_step, col + 2 * col_step, path, solutions)
-                path.pop()
-
-    return
-
-
 def solution(passcode: str) -> str:
-    path: List[str] = []
-    solutions: List[List[str]] = []
-
-    solve(passcode=passcode, row=1, col=1, path=path, solutions=solutions)
 
     shortest_len: int = float("inf")  # type: ignore
     shortest_path: List[str] = []
 
-    for p in solutions:
-        if len(p) < shortest_len:
-            shortest_len = len(p)
-            shortest_path = p
+    def dfs(row: int, col: int, path: List[str]) -> None:
+        nonlocal shortest_len
+        nonlocal shortest_path
 
+        if MAZE[row][col] == VAULT:
+            if len(path) < shortest_len:
+                shortest_len = len(path)
+                shortest_path = path.copy()
+            return
+
+        if len(path) > shortest_len:
+            return
+
+        # SPACE or START
+        hashed: str = md5_short_hash(passcode + "".join(path))
+        for d, code in zip(DOORS, hashed):
+
+            if code in OPEN_DOOR_CODE:
+                row_step, col_step = STEPS[d]
+                neighbor_row: int = row + row_step
+                neighbor_col: int = col + col_step
+
+                if MAZE[neighbor_row][neighbor_col] != WALL:
+                    path.append(d)
+                    dfs(row + 2 * row_step, col + 2 * col_step, path)
+                    path.pop()
+        return
+
+    dfs(row=1, col=1, path=[])
     return "".join(shortest_path)
 
 
