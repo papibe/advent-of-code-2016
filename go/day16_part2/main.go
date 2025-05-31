@@ -46,8 +46,8 @@ func solution(puzzle_input string, length int) string {
 	a := []rune(puzzle_input)
 
 	for len(a) < length {
-		a = append(a, '0')
 		a_reversed_inverted := reversed_invert(&a)
+		a = append(a, '0')
 		a = append(a, a_reversed_inverted...)
 
 	}
