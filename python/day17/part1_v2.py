@@ -46,7 +46,7 @@ def solution(passcode: str) -> str:
                 shortest_path = path.copy()
             return
 
-        if len(path) + 1 >= shortest_len:
+        if len(path) > shortest_len:
             return
 
         # SPACE or START
