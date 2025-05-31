@@ -14,9 +14,7 @@ MAZE: List[str] = [
     "#########",
 ]
 
-START: str = "S"
 WALL: str = "#"
-SPACE: str = " "
 VAULT: str = "V"
 
 DOORS: List[str] = ["U", "D", "L", "R"]
