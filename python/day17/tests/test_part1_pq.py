@@ -1,6 +1,6 @@
 import pytest
 
-from part1_v2 import solution
+from part1_pq import solution
 
 
 @pytest.mark.parametrize(
