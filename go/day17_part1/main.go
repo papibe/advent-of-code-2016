@@ -20,9 +20,7 @@ var MAZE = []string{
 	"#########",
 }
 
-const START = 'S'
 const WALL = '#'
-const SPACE = ' '
 const VAULT = 'V'
 
 var DOORS = []string{"U", "D", "L", "R"}
@@ -51,49 +49,48 @@ func copy_list(l []string) []string {
 	return output
 }
 
-func solve(passcode string, row, col int, path []string, solutions *[][]string) {
-	if MAZE[row][col] == VAULT {
-		*solutions = append(*solutions, copy_list(path))
-		return
-	}
+func solution(passcode string) string {
 
-	// SPACE or START
-	hashed := md5_hash(passcode + strings.Join(path, ""))
-	for index := range len(DOORS) {
-		d := DOORS[index]
-		code := hashed[index]
+	shortest_len := math.MaxInt
+	var shortest_path []string
+	var dfs func(row, col int, path *[]string)
 
-		if is_open_door_code(rune(code)) {
-			row_step, col_step := STEPS[d][0], STEPS[d][1]
+	dfs = func(row, col int, path *[]string) {
 
-			neighbor_row := row + row_step
-			neighbor_col := col + col_step
+		if MAZE[row][col] == VAULT {
+			if len(*path) < shortest_len {
+				shortest_len = len(*path)
+				shortest_path = copy_list(*path)
+			}
+			return
+		}
 
-			if MAZE[neighbor_row][neighbor_col] != WALL {
-				path = append(path, d)
-				solve(passcode, row+2*row_step, col+2*col_step, path, solutions)
-				path = path[:len(path)-1]
+		if len(*path) > shortest_len {
+			return
+		}
+
+		// SPACE or START
+		hashed := md5_hash(passcode + strings.Join(*path, ""))
+		for index := range len(DOORS) {
+			d := DOORS[index]
+			code := hashed[index]
+
+			if is_open_door_code(rune(code)) {
+				row_step, col_step := STEPS[d][0], STEPS[d][1]
+
+				neighbor_row := row + row_step
+				neighbor_col := col + col_step
+
+				if MAZE[neighbor_row][neighbor_col] != WALL {
+					*path = append(*path, d)
+					dfs(row+2*row_step, col+2*col_step, path)
+					*path = (*path)[:len(*path)-1]
+				}
 			}
 		}
 	}
-}
 
-func solution(passcode string) string {
-	path := []string{}
-	solutions := [][]string{}
-
-	solve(passcode, 1, 1, path, &solutions)
-
-	shortest_len := math.MaxInt
-	shortest_path := []string{}
-
-	for _, p := range solutions {
-		if len(p) < shortest_len {
-			shortest_len = len(p)
-			shortest_path = p
-		}
-	}
-
+	dfs(1, 1, &[]string{})
 	return strings.Join(shortest_path, "")
 }
 
