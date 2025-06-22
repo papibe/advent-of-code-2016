@@ -1,16 +1,14 @@
-import re
-from collections import deque
-from dataclasses import dataclass
-from typing import Deque, Dict, List, Match, Optional, Set, Tuple
+from typing import List
 
 SAFE: str = "."
 TRAP: str = "^"
 
+
 def parse(filename: str) -> List[str]:
     with open(filename, "r") as fp:
-        data: List[str] = fp.read().strip()
+        data: str = fp.read().strip()
 
-    return data
+    return [char for char in data]
 
 
 def solve(tiles: List[str], times: int) -> int:
@@ -27,10 +25,10 @@ def solve(tiles: List[str], times: int) -> int:
             center: str = tiles[index]
             right: str = tiles[index + 1] if index < n - 1 else SAFE
 
-            rule1: bool = (left == TRAP and center == TRAP and right == SAFE)
-            rule2: bool = (center == TRAP and right == TRAP and left == SAFE)
-            rule3: bool = (left == TRAP and center == SAFE and right == SAFE)
-            rule4: bool = (right == TRAP and left == SAFE and center == SAFE)
+            rule1: bool = left == TRAP and center == TRAP and right == SAFE
+            rule2: bool = center == TRAP and right == TRAP and left == SAFE
+            rule3: bool = left == TRAP and center == SAFE and right == SAFE
+            rule4: bool = right == TRAP and left == SAFE and center == SAFE
 
             if rule1 or rule2 or rule3 or rule4:
                 next_tile = TRAP
