@@ -13,5 +13,4 @@ def solution(number_of_elves: int) -> int:
 
 
 if __name__ == "__main__":
-    print(solution(5))  # 3
     print(solution(3014387))  # 1834471
