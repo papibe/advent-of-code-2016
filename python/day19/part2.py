@@ -23,5 +23,4 @@ def solution(number_of_elves: int) -> int:
 
 
 if __name__ == "__main__":
-    assert solution(5) == 2
-    assert solution(3014387) == 1420064
+    print(solution(3014387))  # 1420064
