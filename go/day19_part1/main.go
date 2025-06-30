@@ -21,6 +21,5 @@ func solution(number_of_elves int) int {
 }
 
 func main() {
-	fmt.Println(solution(5))       // 3
 	fmt.Println(solution(3014387)) // 1834471
 }
