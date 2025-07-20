@@ -222,9 +222,9 @@ func solve(
 				current.y,
 				current.x,
 			)
-			if intermediate_steps == INVALID {
-				panic("say what!?")
-			}
+			// if intermediate_steps == INVALID {
+			// 	panic("say what!?")
+			// }
 			queue.append(MainQueueItem{steps + intermediate_steps + 1, neighbor, current})
 			visited.add(VisitedItem{neighbor, current})
 		}
@@ -234,11 +234,6 @@ func solve(
 
 func solution(filename string) int {
 	grid := parse(filename)
-	// for _, row := range grid.grid {
-	// 	for _, item := range row {
-	// 		fmt.Println(item)
-	// 	}
-	// }
 
 	return solve(
 		grid,
