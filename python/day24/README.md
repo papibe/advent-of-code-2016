@@ -1,65 +1,47 @@
+# Day 24 - Advent of Code 2016
 
-# Day 23 - Advent of Code 2016
+## --- Day 24: Air Duct Spelunking ---
 
-## --- Day 23: Safe Cracking ---
+------------------------------------
 
-------------------------------
+You've finally met your match; the doors that provide access to the roof are locked tight, and all of the controls and related electronics are inaccessible. You simply can't reach them.
 
-This is one of the top floors of the nicest tower in EBHQ. The Easter Bunny's private office is here, complete with a safe hidden behind a painting, and who _wouldn't_ hide a star in a safe behind a painting?
+The robot that cleans the air ducts, however, _can_.
 
-The safe has a digital screen and keypad for code entry. A sticky note attached to the safe has a password hint on it: "eggs". The painting is of a large rabbit coloring some eggs. You see `7`.
+It's not a very fast little robot, but you reconfigure it to be able to interface with some of the exposed wires that have been routed through the [HVAC](https://en.wikipedia.org/wiki/HVAC) system. If you can direct it to each of those locations, you should be able to bypass the security controls.
 
-When you go to type the code, though, nothing appears on the display; instead, the keypad comes apart in your hands, apparently having been smashed. Behind it is some kind of socket - one that matches a connector in your [prototype computer](https://adventofcode.com/2016/day/11)! You pull apart the smashed keypad and extract the logic circuit, plug it into your computer, and plug your computer into the safe.
+You extract the duct layout for this area from some blueprints you acquired and create a map with the relevant locations marked (your puzzle input). `0` is your current location, from which the cleaning robot embarks; the other numbers are (in _no particular order_) the locations the robot needs to visit at least once each. Walls are marked as `#`, and open passages are marked as `.`. Numbers behave like open passages.
 
-Now, you just need to figure out what output the keypad would have sent to the safe. You extract the [assembunny code](https://adventofcode.com/2016/day/12) from the logic chip (your puzzle input).
+For example, suppose you have a map like the following:
 
-The code looks like it uses _almost_ the same architecture and instruction set that the [monorail computer](https://adventofcode.com/2016/day/12) used! You should be able to _use the same assembunny interpreter_ for this as you did there, but with one new instruction:
+    ###########
+    #0.1.....2#
+    #.#######.#
+    #4.......3#
+    ###########
 
-`tgl x` _toggles_ the instruction `x` away (pointing at instructions like `jnz` does: positive means forward; negative means backward):
 
-* For _one-argument_ instructions, `inc` becomes `dec`, and all other one-argument instructions become `inc`.
-* For _two-argument_ instructions, `jnz` becomes `cpy`, and all other two-instructions become `jnz`.
-* The arguments of a toggled instruction are _not affected_.
-* If an attempt is made to toggle an instruction outside the program, _nothing happens_.
-* If toggling produces an _invalid instruction_ (like `cpy 1 2`) and an attempt is later made to execute that instruction, _skip it instead_.
-* If `tgl` toggles _itself_ (for example, if `a` is `0`, `tgl a` would target itself and become `inc a`), the resulting instruction is not executed until the next time it is reached.
+To reach all of the points of interest as quickly as possible, you would have the robot take the following path:
 
-For example, given this program:
+* `0` to `4` (`2` steps)
+* `4` to `1` (`4` steps; it can't move diagonally)
+* `1` to `2` (`6` steps)
+* `2` to `3` (`2` steps)
 
-    cpy 2 a
-    tgl a
-    tgl a
-    tgl a
-    cpy 1 a
-    dec a
-    dec a
+Since the robot isn't very fast, you need to find it the _shortest route_. This path is the fewest steps (in the above example, a total of `14`) required to start at `0` and then visit every other location at least once.
 
-* `cpy 2 a` initializes register `a` to `2`.
-* The first `tgl a` toggles an instruction `a` (`2`) away from it, which changes the third `tgl a` into `inc a`.
-* The second `tgl a` also modifies an instruction `2` away from it, which changes the `cpy 1 a` into `jnz 1 a`.
-* The fourth line, which is now `inc a`, increments `a` to `3`.
-* Finally, the fifth line, which is now `jnz 1 a`, jumps `a` (`3`) instructions ahead, skipping the `dec a` instructions.
+Given your actual map, and starting from location `0`, what is the _fewest number of steps_ required to visit every non-`0` number marked on the map at least once?
 
-In this example, the final value in register `a` is `3`.
-
-The rest of the electronics seem to place the keypad entry (the number of eggs, `7`) in register `a`, run the code, and then send the value left in register `a` to the safe.
-
-_What value_ should be sent to the safe?
-
-Your puzzle answer was `10152`.
+Your puzzle answer was `464`.
 
 ## --- Part Two ---
 
-------------------------------
+------------------------------------
 
-The safe doesn't open, but it _does_ make several angry noises to express its frustration.
+Of course, if you leave the cleaning robot somewhere weird, someone is bound to notice.
 
-You're quite sure your logic is working correctly, so the only other thing is... you check the painting again. As it turns out, colored eggs are still eggs. Now you count `12`.
+What is the fewest number of steps required to start at `0`, visit every non-`0` number marked on the map at least once, and then _return to `0`_?
 
-As you run the program with this new input, the prototype computer begins to _overheat_. You wonder what's taking so long, and whether the lack of any instruction more powerful than "add one" has anything to do with it. Don't bunnies usually _multiply_?
-
-Anyway, _what value_ should actually be sent to the safe?
-
-Your puzzle answer was `479006712`.
+Your puzzle answer was `652`.
 
 Both parts of this puzzle are complete! They provide two gold stars: \*\*
